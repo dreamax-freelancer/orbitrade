@@ -1,6 +1,6 @@
 # Orbit — AI Crypto Chart Intelligence
 
-Orbit is a responsive AI-powered trading workspace for crypto traders. It turns chart questions and chart screenshots into structured, visual market insights so traders can analyze faster, follow a calmer process, and make more consistent decisions.
+Orbit is a responsive AI-powered trading workspace for crypto traders. It turns Crypto trading education questions and chart screenshots into structured, visual market insights so traders can analyze faster, follow a calmer process, and make more consistent decisions.
 
 ## Live product
 
