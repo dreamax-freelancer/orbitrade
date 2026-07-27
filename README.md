@@ -313,7 +313,7 @@ supabase functions deploy orbit-api --project-ref your-project-ref
    Password: water20484
    ```
 
-3. Sign in and verify the authenticated name and email appear in the dashboard.
+3. Sign in and test the app once logged in the dashboard.
 4. Ask the Coach a suggested question and confirm the answer appears as an Insight Card.
 5. Upload a crypto chart screenshot and confirm the visual market read appears.
 6. Open History and verify the Coach session or chart analysis is saved.
