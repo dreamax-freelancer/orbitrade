@@ -1,6 +1,6 @@
 # Orbit — AI Crypto Chart Intelligence
 
-Orbit is a responsive AI-powered trading workspace for crypto traders. It turns Crypto trading education questions and chart screenshots into structured, visual market insights so traders can analyze faster, follow a calmer process, and make more consistent decisions.
+Orbit is a responsive AI-powered trading workspace for retail crypto traders. It turns trading education questions and chart screenshots into structured, visual market insights so traders can analyze faster, follow a calmer process, and make more consistent decisions.
 
 ## Live product
 
@@ -10,9 +10,9 @@ Orbit is a responsive AI-powered trading workspace for crypto traders. It turns 
 
 ### The problem Orbit solves
 
-Crypto traders often have to combine charting tools, market news, indicators, tutorials, and unstructured AI chat before they can form a trading plan. That creates information overload and encourages emotional decisions, late entries, weak risk management, and unreliable signal hunting.
+Many retail crypto traders enter the market with limited experience, limited time for learning, and no structured process. They may follow FOMO, enter on the wrong candle, chase a move after it has already started, or make decisions with minimal understanding of market structure. The result is poor timing, weak entries and exits, unmanaged risk, emotional trading, and no reliable way to learn from previous decisions.
 
-Orbit gives traders one focused analysis workspace. It explains market concepts, reviews chart structure, highlights risk and invalidation, and stores the trader's analysis history behind authenticated access.
+Orbit addresses this problem with one focused, educational analysis workspace. The Trading Coach explains the concepts traders need to understand, while Chart Analysis helps them study a specific chart before entering a position. Orbit turns visible market structure into a clear read with trend, support, resistance, entry zone, target, stop-loss, invalidation, and a wait/hold/enter perspective. Its History feature keeps sessions and analyses traceable so traders can review their process and build better habits over time.
 
 ### Who Orbit is for
 
@@ -168,6 +168,7 @@ This structured-response requirement is central to Orbit's product identity: AI 
 
 ### Frontend
 
+- ChatGPT Codex for product design direction, frontend implementation, debugging, responsive refinement, and project documentation
 - React
 - Vite
 - JavaScript/JSX
@@ -181,13 +182,13 @@ This structured-response requirement is central to Orbit's product identity: AI 
 - Supabase Row Level Security for user-owned data
 - Supabase private Storage bucket for chart uploads
 - Supabase Edge Functions for protected AI orchestration
-- Vercel for the live frontend deployment
-- GitHub for source control
+- Vercel for hosting and the live frontend deployment
+- GitHub for source control, version history, and deployment integration
 
 ### AI and market data
 
-- Google Gemini API, with `gemini-2.5-flash` as the primary model
-- OpenRouter free model routing as the automatic fallback
+- Google Gemini's free `gemini-2.5-flash` API as the primary AI model
+- OpenRouter's free model routing as the automatic fallback when Gemini is unavailable
 - `openrouter/free` vision fallback configuration for chart images
 - Binance public WebSocket mini-ticker stream for BTC/ETH prices
 
