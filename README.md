@@ -183,17 +183,27 @@ This structured-response requirement is central to Orbit's product identity: AI 
 
 ## 5. Screenshots
 
-Replace the placeholders below with screenshots from the deployed application. Suggested files:
+The following screenshots show the deployed Orbit experience:
 
-![Orbit landing page — replace with screenshot](docs/screenshots/landing-page.png)
+### Landing page
 
-![Orbit Trading Coach — replace with screenshot](docs/screenshots/trading-coach.png)
+![Orbit landing page](docs/screenshots/landing-page.png)
 
-![Orbit Chart Analysis — replace with screenshot](docs/screenshots/chart-analysis.png)
+### Account creation
 
-![Orbit mobile dashboard — replace with screenshot](docs/screenshots/mobile-dashboard.png)
+![Orbit account creation screen](docs/screenshots/signup.png)
 
-> Create a `docs/screenshots/` folder and add the image files using the names above, or update the image paths to match your screenshots.
+### Trading Coach
+
+![Orbit Trading Coach dashboard](docs/screenshots/trading-coach.png)
+
+### Chart Analysis
+
+![Orbit Chart Analysis dashboard](docs/screenshots/chart-analysis.png)
+
+### Saved history
+
+![Orbit saved analysis history](docs/screenshots/history.png)
 
 ## 6. Environment variables
 
