@@ -144,7 +144,8 @@ Deno.serve(async (request) => {
       const { data: file, error: fileError } = await admin.storage.from('chart-uploads').download(storagePath)
       if (fileError || !file) throw new Error('Chart image could not be retrieved.')
       const image = { mimeType: file.type || 'image/png', data: toBase64(await file.arrayBuffer()) }
-      const prompt = `Analyze this crypto chart for education only. Return this chart schema: ${JSON.stringify(chartSchema)}. Never invent price levels; use "Not visible" when labels are unreadable.`
+      const prompt = `Analyze the uploaded crypto chart image itself for education only. Return this chart schema: ${JSON.stringify(chartSchema)}.
+Use only evidence visible in this image. Identify the actual symbol, timeframe, visible price labels, trend, market structure, support, resistance, entry area, invalidation, and targets. Never reuse demo BTC/USDT levels, never assume the image is BTC, and never invent price levels. If a symbol, timeframe, label, or level is unreadable or absent, return "Not visible". Explain whether the specific chart supports entering, waiting, or holding, and include the visual evidence in the summary and checklist.`
       const analysis = ensureAnswer(await askAI(prompt, image), 'chart')
       const { data, error } = await admin.from('chart_analyses').insert({ user_id: user.id, storage_path: storagePath, market: body.market ?? null, timeframe: body.timeframe ?? null, analysis }).select('id, created_at').single()
       if (error) throw error

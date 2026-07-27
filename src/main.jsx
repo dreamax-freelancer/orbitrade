@@ -198,7 +198,7 @@ function ChartPlaceholder() {
   return <div className="chart-placeholder"><div className="placeholder-grid"/><svg viewBox="0 0 800 300" preserveAspectRatio="none"><path d="M0 232 52 211 95 225 138 177 181 188 224 145 267 158 310 108 353 126 396 73 439 93 482 42 525 68 568 29 611 83 654 64 697 91 800 38" fill="none" stroke="#c8ff36" strokeWidth="4"/><path d="M0 232 52 211 95 225 138 177 181 188 224 145 267 158 310 108 353 126 396 73 439 93 482 42 525 68 568 29 611 83 654 64 697 91 800 38V300H0Z" fill="url(#dashboardChartFill)" opacity=".28"/></svg><span className="placeholder-tag">BTC / USDT · 4H</span></div>;
 }
 
-function ChartAnalysisView() {
+function ChartAnalysisViewLegacy() {
   const [fileUrl, setFileUrl] = useState('');
   const [processing, setProcessing] = useState(false);
   const [analyzed, setAnalyzed] = useState(false);
@@ -252,6 +252,40 @@ function ChartAnalysisView() {
   };
   const reset = () => { if (fileUrl) URL.revokeObjectURL(fileUrl); setFileUrl(''); setUploadStatus(''); setAnalysis(null); setAnalyzed(false); setProcessing(false); };
   return <section className="dashboard-view analysis-view"><div className="view-heading analysis-heading"><div><span className="view-kicker"><Icon name="chart" size={13}/> Chart Analysis</span><h1>Upload a chart.<br/><em>See what matters.</em></h1><p>Orbit maps structure, risk and timing into one visual market read.</p></div><div className="analysis-time"><span className="live-dot"/> Analysis engine ready</div></div>{!fileUrl && <label className="upload-zone" onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); handleFile(event.dataTransfer.files?.[0]); }}><input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => handleFile(event.target.files?.[0])}/><span className="upload-icon"><Icon name="upload" size={23}/></span><b>Drop a chart screenshot here</b><span>or click to browse · PNG, JPG, WEBP</span><small>We’ll return trend, levels, entry, target and invalidation.</small></label>}{processing && <SkeletonInsight/>}{analyzed && <>{uploadStatus && <p className="upload-status" role="status">{uploadStatus}</p>}<MarketReadCard/><figure className="annotated-chart"><div className="chart-image-wrap">{fileUrl ? <img src={fileUrl} alt="Uploaded crypto chart"/> : <ChartPlaceholder/>}<span className="chart-line line-support">Support · $67,420</span><span className="chart-line line-resistance">Resistance · $71,800</span><span className="entry-highlight">Entry zone</span><i className="overlay-support"/><i className="overlay-resistance"/><i className="overlay-entry"/></div><figcaption><span><i className="legend-support"/> Support / resistance mapped by Orbit</span><button onClick={reset}>Analyze another chart <Icon name="arrow" size={14}/></button></figcaption></figure><div className="persistent-disclaimer"><Icon name="shield" size={15}/><span>Educational analysis — not financial advice. Always do your own research.</span></div></>}</section>;
+}
+
+function ChartAnalysisView() {
+  const [fileUrl, setFileUrl] = useState('');
+  const [processing, setProcessing] = useState(false);
+  const [analyzed, setAnalyzed] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState('');
+  const [analysis, setAnalysis] = useState(null);
+
+  const handleFile = async (file) => {
+    if (!file || !file.type.startsWith('image/')) { setUploadStatus('Please upload a PNG, JPG, or WEBP chart image.'); return; }
+    if (file.size > 10 * 1024 * 1024) { setUploadStatus('Please upload an image smaller than 10 MB.'); return; }
+    if (fileUrl) URL.revokeObjectURL(fileUrl);
+    setFileUrl(URL.createObjectURL(file)); setUploadStatus(''); setAnalysis(null); setAnalyzed(false); setProcessing(true);
+    let uploadedPath = '';
+    try {
+      if (!supabase) throw new Error('Supabase is not configured.');
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Your session has expired. Please sign in again.');
+      const extension = file.name.split('.').pop()?.toLowerCase() || 'png';
+      uploadedPath = `${user.id}/${crypto.randomUUID()}.${extension}`;
+      const { error: uploadError } = await supabase.storage.from('chart-uploads').upload(uploadedPath, file, { contentType: file.type, upsert: false });
+      if (uploadError) throw new Error(`Chart upload failed: ${uploadError.message}`);
+      const result = await callOrbitApi({ kind: 'chart', storagePath: uploadedPath, market: 'BTC/USDT', timeframe: '4H' });
+      if (!result?.analysis) throw new Error('The AI returned no chart analysis.');
+      setAnalysis(result.analysis); setAnalyzed(true);
+    } catch (error) { setUploadStatus(error.message || 'Chart analysis is unavailable. Please try again.'); }
+    finally { setProcessing(false); }
+  };
+
+  const reset = () => { if (fileUrl) URL.revokeObjectURL(fileUrl); setFileUrl(''); setUploadStatus(''); setAnalysis(null); setAnalyzed(false); setProcessing(false); };
+  const support = analysis?.support?.[0] || 'Not visible';
+  const resistance = analysis?.resistance?.[0] || 'Not visible';
+  return <section className="dashboard-view analysis-view"><div className="view-heading analysis-heading"><div><span className="view-kicker"><Icon name="chart" size={13}/> Chart Analysis</span><h1>Upload a chart.<br/><em>See what matters.</em></h1><p>Orbit maps structure, risk and timing into one visual market read.</p></div><div className="analysis-time"><span className="live-dot"/> Analysis engine ready</div></div>{!fileUrl && <label className="upload-zone" onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); handleFile(event.dataTransfer.files?.[0]); }}><input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => handleFile(event.target.files?.[0])}/><span className="upload-icon"><Icon name="upload" size={23}/></span><b>Drop a chart screenshot here</b><span>or click to browse · PNG, JPG, WEBP</span><small>We’ll return trend, levels, entry, target and invalidation.</small></label>}{uploadStatus && !processing && <p className="upload-status" role="status">{uploadStatus}</p>}{processing && <SkeletonInsight/>}{analyzed && analysis && <><MarketReadCard analysis={analysis}/><figure className="annotated-chart"><div className="chart-image-wrap"><img src={fileUrl} alt="Uploaded crypto chart analyzed by Orbit"/><span className="chart-line line-support">Support · {support}</span><span className="chart-line line-resistance">Resistance · {resistance}</span><span className="entry-highlight">Entry zone · {analysis.entry_zone || 'Not visible'}</span><i className="overlay-support"/><i className="overlay-resistance"/><i className="overlay-entry"/></div><figcaption><span><i className="legend-support"/> Levels mapped from this uploaded chart</span><button onClick={reset}>Analyze another chart <Icon name="arrow" size={14}/></button></figcaption></figure><div className="persistent-disclaimer"><Icon name="shield" size={15}/><span>Educational analysis — not financial advice. Always do your own research.</span></div></>}</section>;
 }
 
 function displayNameFor(user, profileName = '') { return profileName || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Trader'; }
