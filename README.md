@@ -306,15 +306,22 @@ supabase functions deploy orbit-api --project-ref your-project-ref
 ## 9. Recommended product test flow
 
 1. Open the [live Orbit app](https://orbitrade-lime.vercel.app/).
-2. Create a test account with email/password.
-3. Confirm the email if email confirmation is enabled.
-4. Sign in and verify the authenticated name and email appear in the dashboard.
-5. Ask the Coach a suggested question and confirm the answer appears as an Insight Card.
-6. Upload a crypto chart screenshot and confirm the visual market read appears.
-7. Open History and verify the Coach session or chart analysis is saved.
-8. Open Settings, change the display name, save, and refresh.
-9. Test the same flow at mobile width.
-10. Log out and confirm the landing page returns without requiring a refresh.
+2. Use the instructor/demo account below; no signup is required for verification:
+
+   ```text
+   Email: water20484@kingcq.com
+   Password: water20484
+   ```
+
+3. Sign in and verify the authenticated name and email appear in the dashboard.
+4. Ask the Coach a suggested question and confirm the answer appears as an Insight Card.
+5. Upload a crypto chart screenshot and confirm the visual market read appears.
+6. Open History and verify the Coach session or chart analysis is saved.
+7. Open Settings, change the display name, save, and refresh.
+8. Test the same flow at mobile width.
+9. Log out and confirm the landing page returns without requiring a refresh.
+
+> This account is intended only for instructor/demo verification. Do not use it for private data, production operations, or real trading activity.
 
 ## 10. Project structure
 
