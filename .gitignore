@@ -1,5 +1,25 @@
+# Local environment files and secrets
 .env
-.env.local
-.env.*.local
-node_modules
-dist
+.env.*
+!.env.example
+
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+
+# Supabase local state
+.supabase/
+
+# Logs, caches, and temporary files
+*.log
+.npm/
+.cache/
+tmp/
+temp/
+
+# Local editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
